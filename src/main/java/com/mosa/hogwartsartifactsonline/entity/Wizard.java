@@ -1,12 +1,10 @@
-package com.mosa.hogwartsartifactsonline.wizard;
+package com.mosa.hogwartsartifactsonline.entity;
 
-import com.mosa.hogwartsartifactsonline.artifact.Artifact;
+import com.mosa.hogwartsartifactsonline.entity.Artifact;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -50,5 +48,14 @@ public class Wizard implements Serializable {
 
     public void setArtifacts(List<Artifact> artifacts) {
         this.artifacts = artifacts;
+    }
+
+    public void addArtifact(Artifact artifact) {
+        artifact.setOwner(this);
+        this.artifacts.add(artifact);
+    }
+
+    public Integer getNumberOfArtifacts() {
+        return this.artifacts.size();
     }
 }

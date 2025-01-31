@@ -1,5 +1,30 @@
+package com.mosa.hogwartsartifactsonline.system;
 
-Artifact a1 = new Artifact();
+import com.mosa.hogwartsartifactsonline.entity.Artifact;
+import com.mosa.hogwartsartifactsonline.entity.Wizard;
+import com.mosa.hogwartsartifactsonline.repo.ArtifactRepository;
+import com.mosa.hogwartsartifactsonline.repo.WizardRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.CommandLineRunner;
+import org.springframework.stereotype.Component;
+
+@Component
+public class DBDataInitializer implements CommandLineRunner {
+
+    ArtifactRepository artifactRepository;
+    WizardRepository wizardRepository;
+
+    @Autowired          // it's optional -> because it's only one constructor
+    public DBDataInitializer(ArtifactRepository artifactRepository, WizardRepository wizardRepository) {
+        this.artifactRepository = artifactRepository;
+        this.wizardRepository = wizardRepository;
+    }
+
+
+    @Override
+    public void run(String... args) throws Exception {
+
+        Artifact a1 = new Artifact();
         a1.setId("1250808601744904191");
         a1.setName("Deluminator");
         a1.setDescription("A Deluminator is a device invented by Albus Dumbledore that resembles a cigarette lighter. It is used to remove or absorb (as well as return) the light from any light source to provide cover to the user.");
@@ -36,17 +61,20 @@ Artifact a1 = new Artifact();
         a6.setImageUrl("https://hogwartsartifactsonline.blob.core.windows.net/artifact-image-container/resurrection-stone.jpg");
 
         Wizard w1 = new Wizard();
+        w1.setId(1);
         w1.setName("Albus Dumbledore");
         w1.addArtifact(a1);
         w1.addArtifact(a3);
         // Don't manually set the id for the wizard, let the database generate it.
 
         Wizard w2 = new Wizard();
+        w2.setId(2);
         w2.setName("Harry Potter");
         w2.addArtifact(a2);
         w2.addArtifact(a4);
 
         Wizard w3 = new Wizard();
+        w3.setId(3);
         w3.setName("Neville Longbottom");
         w3.addArtifact(a5);
 
@@ -56,22 +84,6 @@ Artifact a1 = new Artifact();
 
         artifactRepository.save(a6);
 
-        // Create some users.
-        HogwartsUser u1 = new HogwartsUser();
-        u1.setUsername("john");
-        u1.setPassword("123456");
-        u1.setEnabled(true);
-        u1.setRoles("admin user");
-        // Don't manually set the id for the user, let the database generate it.
 
-        HogwartsUser u2 = new HogwartsUser();
-        u2.setUsername("eric");
-        u2.setPassword("654321");
-        u2.setEnabled(true);
-        u2.setRoles("user");
-
-        HogwartsUser u3 = new HogwartsUser();
-        u3.setUsername("tom");
-        u3.setPassword("qwerty");
-        u3.setEnabled(false);
-        u3.setRoles("user");
+    }
+}

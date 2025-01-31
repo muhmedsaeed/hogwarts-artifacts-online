@@ -1,11 +1,8 @@
-package com.mosa.hogwartsartifactsonline.artifact;
+package com.mosa.hogwartsartifactsonline.entity;
 
-import com.mosa.hogwartsartifactsonline.wizard.Wizard;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 
