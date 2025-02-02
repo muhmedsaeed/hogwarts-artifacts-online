@@ -2,8 +2,11 @@ package com.mosa.hogwartsartifactsonline.service;
 
 import com.mosa.hogwartsartifactsonline.entity.Artifact;
 import com.mosa.hogwartsartifactsonline.entity.Wizard;
+import com.mosa.hogwartsartifactsonline.exception.ArtifactNotFoundException;
 import com.mosa.hogwartsartifactsonline.repo.ArtifactRepository;
+import com.mosa.hogwartsartifactsonline.utils.IdWorker;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -12,20 +15,24 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import javax.security.auth.login.AccountNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.catchThrowable;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class ArtifactServiceTest {
 
     @Mock
     ArtifactRepository artifactRepository;
+
+    @Mock
+    IdWorker idWorker;
 
     @InjectMocks
     ArtifactService artifactService;
@@ -105,8 +112,6 @@ class ArtifactServiceTest {
         verify(artifactRepository, times(1)).findById("1250808601744904192");
     }
 
-
-
     @Test
     void testFindByIdNotFound() {
         // given
@@ -122,7 +127,140 @@ class ArtifactServiceTest {
                 .isInstanceOf(RuntimeException.class)
                 .hasMessage("could not find artifact with Id 1250808601744904192 :(");
         verify(artifactRepository, times(1)).findById("1250808601744904192");
+    }
+
+
+    @Test
+    void  testFindAllSuccess() {
+        // Given
+        given(artifactRepository.findAll()).willReturn(artifacts);
+
+        // when
+        List<Artifact> returnedArtifacts = this.artifactService.findAll();
+
+        // Then
+        assertThat(returnedArtifacts.size()).isEqualTo(artifacts.size());
+        assertThat(returnedArtifacts.get(0).getId()).isEqualTo(artifacts.get(0).getId());
+        assertThat(returnedArtifacts.get(1).getId()).isEqualTo(artifacts.get(1).getId());
+
+        verify(artifactRepository, times(1)).findAll();
 
     }
+
+
+    @Test
+    void testSaveSuccess() {
+        // Given
+        Artifact newArtifact = new Artifact();
+        newArtifact.setName("Artifact 3");
+        newArtifact.setDescription("Description...");
+        newArtifact.setImageUrl("ImageUrl...");
+
+        given(idWorker.nextId()).willReturn(123456L);
+        given(artifactRepository.save(newArtifact)).willReturn(newArtifact);
+
+        // When
+        Artifact savedArtifact = artifactService.save(newArtifact);
+
+        // Then
+        assertThat(savedArtifact.getId()).isEqualTo("123456");
+        assertThat(savedArtifact.getName()).isEqualTo(newArtifact.getName());
+        assertThat(savedArtifact.getDescription()).isEqualTo(newArtifact.getDescription());
+        assertThat(savedArtifact.getImageUrl()).isEqualTo(newArtifact.getImageUrl());
+
+        verify(artifactRepository, times(1)).save(newArtifact);
+    }
+
+
+    @Test
+    void testUpdateSuccess() {
+        // Given
+        Artifact oldArtifact = new Artifact();
+        oldArtifact = new Artifact();
+        oldArtifact.setId("1250808601744904192");
+        oldArtifact.setName("Invisibility Cloak");
+        oldArtifact.setDescription("An invisibility cloak is used to make the wearer invisible.");
+        oldArtifact.setImageUrl("https://hogwartsartifactsonline.blob.core.windows.net/artifact-image-container/invisibility-cloak.jpg");
+
+
+        Artifact update = new Artifact();
+        update.setId("1250808601744904192");
+        update.setName("Invisibility Cloak");
+        update.setDescription("This is a new Description");
+        update.setImageUrl("https://hogwartsartifactsonline.blob.core.windows.net/artifact-image-container/invisibility-cloak.jpg");
+
+        given(this.artifactRepository.findById("1250808601744904192")).willReturn(Optional.of(oldArtifact));
+        given(this.artifactRepository.save(oldArtifact)).willReturn(oldArtifact);
+
+        // When
+        Artifact updatedArtifact = this.artifactService.update("1250808601744904192", update);
+
+        // Then
+        assertThat(updatedArtifact.getId()).isEqualTo(update.getId());
+        assertThat(updatedArtifact.getName()).isEqualTo(update.getName());
+        assertThat(updatedArtifact.getDescription()).isEqualTo(update.getDescription());
+        assertThat(updatedArtifact.getImageUrl()).isEqualTo(update.getImageUrl());
+
+        verify(this.artifactRepository, times(1)).save(oldArtifact);
+        verify(this.artifactRepository, times(1)).findById("1250808601744904192");
+    }
+
+
+    @Test
+    void testUpdateNotFound() {
+        // Given
+
+        Artifact update = new Artifact();
+        update.setName("Invisibility Cloak");
+        update.setDescription("This is a new Description");
+        update.setImageUrl("https://hogwartsartifactsonline.blob.core.windows.net/artifact-image-container/invisibility-cloak.jpg");
+
+        given(this.artifactRepository.findById("1250808601744904192")).willReturn(Optional.empty());
+
+        // When
+        Throwable thrown = catchThrowable(() -> {
+            artifactService.update("1250808601744904192", update);
+        });
+
+        // Then
+        assertThat(thrown).isInstanceOf(ArtifactNotFoundException.class);
+        verify(this.artifactRepository, times(1)).findById("1250808601744904192");
+    }
+
+
+    @Test
+    void testDeleteSuccess() {
+        // Given
+        Artifact deleteArtifact = new Artifact();
+        deleteArtifact.setId("1250808601744904196");
+        deleteArtifact.setName("Resurrection Stone");
+        deleteArtifact.setDescription("The Resurrection Stone allows the holder to bring back deceased loved ones, in a semi-physical form, and communicate with them.");
+        deleteArtifact.setImageUrl("https://hogwartsartifactsonline.blob.core.windows.net/artifact-image-container/resurrection-stone.jpg");
+
+        given(this.artifactRepository.findById("1250808601744904196")).willReturn(Optional.of(deleteArtifact));
+        doNothing().when(this.artifactRepository).deleteById("1250808601744904196");
+
+        // When
+        this.artifactService.delete("1250808601744904196");
+
+        // Then
+        verify(this.artifactRepository, times(1)).findById("1250808601744904196");
+        verify(this.artifactRepository, times(1)).deleteById("1250808601744904196");
+    }
+
+    @Test
+    void testDeleteNotFound() {
+        // Given
+        given(this.artifactRepository.findById("1250808601744904196")).willReturn(Optional.empty());
+
+        // When
+        assertThrows(ArtifactNotFoundException.class, () -> {
+            this.artifactService.delete("1250808601744904196");
+        });
+
+        // Then
+        verify(this.artifactRepository, times(1)).findById("1250808601744904196");
+    }
+
 
 }
