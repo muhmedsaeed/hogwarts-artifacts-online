@@ -2,7 +2,7 @@ package com.mosa.hogwartsartifactsonline.service;
 
 import com.mosa.hogwartsartifactsonline.entity.Artifact;
 import com.mosa.hogwartsartifactsonline.entity.Wizard;
-import com.mosa.hogwartsartifactsonline.exception.ArtifactNotFoundException;
+import com.mosa.hogwartsartifactsonline.exception.ObjectNotFoundException;
 import com.mosa.hogwartsartifactsonline.repo.ArtifactRepository;
 import com.mosa.hogwartsartifactsonline.utils.IdWorker;
 import org.junit.jupiter.api.AfterEach;
@@ -122,7 +122,7 @@ class ArtifactServiceTest {
         // then
         assertThat(thrown)
                 .isInstanceOf(RuntimeException.class)
-                .hasMessage("could not find artifact with Id 1250808601744904192 :(");
+                .hasMessage("Could not find artifact with Id 1250808601744904192 :(");
         verify(artifactRepository, times(1)).findById("1250808601744904192");
     }
 
@@ -219,7 +219,7 @@ class ArtifactServiceTest {
         });
 
         // Then
-        assertThat(thrown).isInstanceOf(ArtifactNotFoundException.class);
+        assertThat(thrown).isInstanceOf(ObjectNotFoundException.class);
         verify(this.artifactRepository, times(1)).findById("1250808601744904192");
     }
 
@@ -250,7 +250,7 @@ class ArtifactServiceTest {
         given(this.artifactRepository.findById("1250808601744904196")).willReturn(Optional.empty());
 
         // When
-        assertThrows(ArtifactNotFoundException.class, () -> {
+        assertThrows(ObjectNotFoundException.class, () -> {
             this.artifactService.delete("1250808601744904196");
         });
 

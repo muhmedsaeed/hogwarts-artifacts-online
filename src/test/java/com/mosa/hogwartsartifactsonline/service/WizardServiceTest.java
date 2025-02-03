@@ -1,7 +1,7 @@
 package com.mosa.hogwartsartifactsonline.service;
 
 import com.mosa.hogwartsartifactsonline.entity.Wizard;
-import com.mosa.hogwartsartifactsonline.exception.WizardNotFoundException;
+import com.mosa.hogwartsartifactsonline.exception.ObjectNotFoundException;
 import com.mosa.hogwartsartifactsonline.repo.WizardRepository;
 import com.mosa.hogwartsartifactsonline.utils.IdGenerator;
 import org.junit.jupiter.api.AfterEach;
@@ -97,7 +97,7 @@ class WizardServiceTest {
         });
 
         // Then
-        assertThat(thrown).isInstanceOf(WizardNotFoundException.class).hasMessage("Could not find wizard with Id 1 :(");
+        assertThat(thrown).isInstanceOf(ObjectNotFoundException.class).hasMessage("Could not find wizard with Id 1 :(");
 
         verify(this.wizardRepository, times(1)).findById(1);
 
@@ -174,11 +174,11 @@ class WizardServiceTest {
         Wizard update = new Wizard();
         update.setName("New Wizard...");
 
-        given(this.wizardRepository.findById(5)).willThrow(new WizardNotFoundException(5));
+        given(this.wizardRepository.findById(5)).willThrow(new ObjectNotFoundException("wizard", 5));
 
         // When
 
-        assertThrows(WizardNotFoundException.class, () -> {
+        assertThrows(ObjectNotFoundException.class, () -> {
             this.wizardService.update(5 ,update);
         });
 
@@ -212,7 +212,7 @@ class WizardServiceTest {
         given(this.wizardRepository.findById(5)).willReturn(Optional.empty());
 
         // When
-        assertThrows(WizardNotFoundException.class, () -> {
+        assertThrows(ObjectNotFoundException.class, () -> {
             this.wizardService.delete(5);
         });
 

@@ -18,20 +18,13 @@ import java.util.Map;
 public class ExceptionHandlerAdvice {
 
 
-    @ExceptionHandler(ArtifactNotFoundException.class)
+    @ExceptionHandler(ObjectNotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND) // it's optional
-    Result handleArtifactNotFoundException(ArtifactNotFoundException e) {
+    Result handleObjectNotFoundException(ObjectNotFoundException e) {
 
         return new Result(false, StatusCode.NOT_FOUND, e.getMessage());
     }
 
-
-    @ExceptionHandler(WizardNotFoundException.class)
-    @ResponseStatus(HttpStatus.NOT_FOUND)
-    Result handleWizardNotFoundException(WizardNotFoundException e) {
-
-        return new Result(false, StatusCode.NOT_FOUND, e.getMessage(), null);
-    }
 
 
     @ExceptionHandler(MethodArgumentNotValidException.class)

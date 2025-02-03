@@ -8,13 +8,14 @@ import com.mosa.hogwartsartifactsonline.entity.Wizard;
 import com.mosa.hogwartsartifactsonline.service.WizardService;
 import com.mosa.hogwartsartifactsonline.system.Result;
 import com.mosa.hogwartsartifactsonline.system.StatusCode;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/v1/wizards")
+@RequestMapping("${api.endpoint.base-url}/wizards")
 public class WizardController {
 
     private final WizardService wizardService;
@@ -53,7 +54,7 @@ public class WizardController {
 
 
     @PostMapping("/add")
-    public Result addWizard(@RequestBody WizardDto wizardDto) {
+    public Result addWizard(@Valid @RequestBody WizardDto wizardDto) {
         Wizard wizard = this.wizardDtoToWizardConverter.convert(wizardDto);
         wizard = this.wizardService.save(wizard);
         wizardDto = this.wizardToWizardDtoConverter.convert(wizard);
@@ -63,7 +64,7 @@ public class WizardController {
 
 
     @PutMapping("/{wizardId}")
-    public Result updateWizard(@RequestBody WizardDto wizardDto, @PathVariable Integer wizardId) {
+    public Result updateWizard(@Valid @RequestBody WizardDto wizardDto, @PathVariable Integer wizardId) {
 
         Wizard wizard = this.wizardDtoToWizardConverter.convert(wizardDto);
         wizard = this.wizardService.update(wizardId, wizard);

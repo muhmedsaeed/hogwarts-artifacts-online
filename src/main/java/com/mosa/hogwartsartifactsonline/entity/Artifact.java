@@ -7,8 +7,6 @@ import jakarta.persistence.ManyToOne;
 import java.io.Serializable;
 
 @Entity
-//@Data
-//@NoArgsConstructor
 public class Artifact implements Serializable {
 
     @Id

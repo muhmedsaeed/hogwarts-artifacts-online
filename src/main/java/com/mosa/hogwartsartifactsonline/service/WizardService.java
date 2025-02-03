@@ -1,10 +1,9 @@
 package com.mosa.hogwartsartifactsonline.service;
 
 import com.mosa.hogwartsartifactsonline.entity.Wizard;
-import com.mosa.hogwartsartifactsonline.exception.WizardNotFoundException;
+import com.mosa.hogwartsartifactsonline.exception.ObjectNotFoundException;
 import com.mosa.hogwartsartifactsonline.repo.WizardRepository;
 import com.mosa.hogwartsartifactsonline.utils.IdGenerator;
-import com.mosa.hogwartsartifactsonline.utils.IdWorker;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -28,7 +27,7 @@ public class WizardService {
 
     public Wizard findById(Integer wizardId) {
 
-        Wizard wizard = this.wizardRepository.findById(wizardId).orElseThrow(() -> new WizardNotFoundException(wizardId));
+        Wizard wizard = this.wizardRepository.findById(wizardId).orElseThrow(() -> new ObjectNotFoundException("wizard", wizardId));
 
         return wizard;
     }
@@ -52,15 +51,17 @@ public class WizardService {
                     oldWizard.setName(newWizard.getName());
                     return this.wizardRepository.save(oldWizard);
                 })
-                .orElseThrow(() -> new WizardNotFoundException(wizardId));
+                .orElseThrow(() -> new ObjectNotFoundException("wizard", wizardId));
     }
 
 
     public void delete(Integer wizardId) {
-        this.wizardRepository
+        Wizard deleteWizard = this.wizardRepository
                 .findById(wizardId)
-                .orElseThrow(() -> new WizardNotFoundException(wizardId));
+                .orElseThrow(() -> new ObjectNotFoundException("wizard", wizardId));
 
+        // to avoid a deletion error
+        deleteWizard.removeAllArtifacts();
         this.wizardRepository.deleteById(wizardId);
     }
 
