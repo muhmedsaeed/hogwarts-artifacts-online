@@ -2,7 +2,7 @@ package com.mosa.hogwartsartifactsonline.service;
 
 import com.mosa.hogwartsartifactsonline.repo.ArtifactRepository;
 import com.mosa.hogwartsartifactsonline.entity.Artifact;
-import com.mosa.hogwartsartifactsonline.exception.ArtifactNotFoundException;
+import com.mosa.hogwartsartifactsonline.exception.ObjectNotFoundException;
 import com.mosa.hogwartsartifactsonline.utils.IdWorker;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,7 +27,7 @@ public class ArtifactService {
     public Artifact findById(String artifactId) {
         return artifactRepository
                 .findById(artifactId)
-                .orElseThrow(() -> new ArtifactNotFoundException(artifactId));
+                .orElseThrow(() -> new ObjectNotFoundException("artifact", artifactId));
     }
 
     public List<Artifact> findAll() {
@@ -56,14 +56,14 @@ public class ArtifactService {
                     // save updated artifact then return it
                     return this.artifactRepository.save(oldArtifact);
                 })
-                .orElseThrow(() -> new ArtifactNotFoundException(artifactId));
+                .orElseThrow(() -> new ObjectNotFoundException("artifact", artifactId));
     }
 
     public void delete(String artifactId) {
 
         this.artifactRepository
                 .findById(artifactId)
-                .orElseThrow(() -> new ArtifactNotFoundException(artifactId));
+                .orElseThrow(() -> new ObjectNotFoundException("artifact", artifactId));
 
         this.artifactRepository.deleteById(artifactId);
     }

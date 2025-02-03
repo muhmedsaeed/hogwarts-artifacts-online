@@ -1,22 +1,18 @@
 package com.mosa.hogwartsartifactsonline.entity;
 
 import com.mosa.hogwartsartifactsonline.entity.Artifact;
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.*;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity(name = "wizard")
-//@Data
-//@NoArgsConstructor
 public class Wizard implements Serializable {
 
     @Id
     private Integer id;
+
     private String name;
 
     @OneToMany(mappedBy = "owner", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
@@ -57,5 +53,13 @@ public class Wizard implements Serializable {
 
     public Integer getNumberOfArtifacts() {
         return this.artifacts.size();
+    }
+
+    public void removeAllArtifacts() {
+        this.artifacts.stream().forEach(artifact -> {
+            artifact.setOwner(null);
+        });
+
+        this.artifacts = null;
     }
 }
