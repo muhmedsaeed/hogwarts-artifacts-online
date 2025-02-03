@@ -6,7 +6,6 @@ import com.mosa.hogwartsartifactsonline.entity.Artifact;
 import com.mosa.hogwartsartifactsonline.exception.ArtifactNotFoundException;
 import com.mosa.hogwartsartifactsonline.service.ArtifactService;
 import com.mosa.hogwartsartifactsonline.system.StatusCode;
-import net.bytebuddy.description.type.TypeDescription;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;

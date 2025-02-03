@@ -26,9 +26,17 @@ public class ExceptionHandlerAdvice {
     }
 
 
+    @ExceptionHandler(WizardNotFoundException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    Result handleWizardNotFoundException(WizardNotFoundException e) {
+
+        return new Result(false, StatusCode.NOT_FOUND, e.getMessage(), null);
+    }
+
+
     @ExceptionHandler(MethodArgumentNotValidException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    Result handelValidationException(MethodArgumentNotValidException e) {
+    Result handleValidationException(MethodArgumentNotValidException e) {
 
         List<ObjectError> errors = e.getBindingResult().getAllErrors();
 

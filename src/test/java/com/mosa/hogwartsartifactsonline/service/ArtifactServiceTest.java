@@ -6,7 +6,6 @@ import com.mosa.hogwartsartifactsonline.exception.ArtifactNotFoundException;
 import com.mosa.hogwartsartifactsonline.repo.ArtifactRepository;
 import com.mosa.hogwartsartifactsonline.utils.IdWorker;
 import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -14,8 +13,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
-
-import javax.security.auth.login.AccountNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -176,7 +173,6 @@ class ArtifactServiceTest {
     void testUpdateSuccess() {
         // Given
         Artifact oldArtifact = new Artifact();
-        oldArtifact = new Artifact();
         oldArtifact.setId("1250808601744904192");
         oldArtifact.setName("Invisibility Cloak");
         oldArtifact.setDescription("An invisibility cloak is used to make the wearer invisible.");
