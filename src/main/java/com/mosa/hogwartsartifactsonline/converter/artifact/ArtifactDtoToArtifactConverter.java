@@ -1,4 +1,4 @@
-package com.mosa.hogwartsartifactsonline.converter;
+package com.mosa.hogwartsartifactsonline.converter.artifact;
 
 import com.mosa.hogwartsartifactsonline.dto.ArtifactDto;
 import com.mosa.hogwartsartifactsonline.entity.Artifact;

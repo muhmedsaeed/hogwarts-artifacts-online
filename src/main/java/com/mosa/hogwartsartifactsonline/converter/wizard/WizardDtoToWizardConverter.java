@@ -1,4 +1,4 @@
-package com.mosa.hogwartsartifactsonline.converter;
+package com.mosa.hogwartsartifactsonline.converter.wizard;
 
 
 import com.mosa.hogwartsartifactsonline.dto.WizardDto;

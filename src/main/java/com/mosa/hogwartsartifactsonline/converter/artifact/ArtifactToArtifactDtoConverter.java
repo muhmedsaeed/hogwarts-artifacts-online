@@ -1,6 +1,7 @@
-package com.mosa.hogwartsartifactsonline.converter;
+package com.mosa.hogwartsartifactsonline.converter.artifact;
 
 
+import com.mosa.hogwartsartifactsonline.converter.wizard.WizardToWizardDtoConverter;
 import com.mosa.hogwartsartifactsonline.dto.ArtifactDto;
 import com.mosa.hogwartsartifactsonline.entity.Artifact;
 import org.springframework.beans.factory.annotation.Autowired;
