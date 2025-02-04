@@ -1,7 +1,7 @@
 package com.mosa.hogwartsartifactsonline.controller;
 
-import com.mosa.hogwartsartifactsonline.converter.ArtifactDtoToArtifactConverter;
-import com.mosa.hogwartsartifactsonline.converter.ArtifactToArtifactDtoConverter;
+import com.mosa.hogwartsartifactsonline.converter.artifact.ArtifactDtoToArtifactConverter;
+import com.mosa.hogwartsartifactsonline.converter.artifact.ArtifactToArtifactDtoConverter;
 import com.mosa.hogwartsartifactsonline.dto.ArtifactDto;
 import com.mosa.hogwartsartifactsonline.entity.Artifact;
 import com.mosa.hogwartsartifactsonline.service.ArtifactService;
@@ -9,12 +9,9 @@ import com.mosa.hogwartsartifactsonline.system.Result;
 import com.mosa.hogwartsartifactsonline.system.StatusCode;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController()
 @RequestMapping("${api.endpoint.base-url}/artifacts")

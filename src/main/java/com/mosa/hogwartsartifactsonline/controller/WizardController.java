@@ -1,8 +1,8 @@
 package com.mosa.hogwartsartifactsonline.controller;
 
 
-import com.mosa.hogwartsartifactsonline.converter.WizardDtoToWizardConverter;
-import com.mosa.hogwartsartifactsonline.converter.WizardToWizardDtoConverter;
+import com.mosa.hogwartsartifactsonline.converter.wizard.WizardDtoToWizardConverter;
+import com.mosa.hogwartsartifactsonline.converter.wizard.WizardToWizardDtoConverter;
 import com.mosa.hogwartsartifactsonline.dto.WizardDto;
 import com.mosa.hogwartsartifactsonline.entity.Wizard;
 import com.mosa.hogwartsartifactsonline.service.WizardService;

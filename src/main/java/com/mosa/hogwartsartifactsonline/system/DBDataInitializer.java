@@ -1,8 +1,10 @@
 package com.mosa.hogwartsartifactsonline.system;
 
 import com.mosa.hogwartsartifactsonline.entity.Artifact;
+import com.mosa.hogwartsartifactsonline.entity.HogwartsUser;
 import com.mosa.hogwartsartifactsonline.entity.Wizard;
 import com.mosa.hogwartsartifactsonline.repo.ArtifactRepository;
+import com.mosa.hogwartsartifactsonline.repo.UserRepository;
 import com.mosa.hogwartsartifactsonline.repo.WizardRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
@@ -11,13 +13,15 @@ import org.springframework.stereotype.Component;
 @Component
 public class DBDataInitializer implements CommandLineRunner {
 
-    ArtifactRepository artifactRepository;
-    WizardRepository wizardRepository;
+    private final ArtifactRepository artifactRepository;
+    private final WizardRepository wizardRepository;
+    private final UserRepository userRepository;
 
     @Autowired          // it's optional -> because it's only one constructor
-    public DBDataInitializer(ArtifactRepository artifactRepository, WizardRepository wizardRepository) {
+    public DBDataInitializer(ArtifactRepository artifactRepository, WizardRepository wizardRepository, UserRepository userRepository) {
         this.artifactRepository = artifactRepository;
         this.wizardRepository = wizardRepository;
+        this.userRepository = userRepository;
     }
 
 
@@ -83,6 +87,33 @@ public class DBDataInitializer implements CommandLineRunner {
         wizardRepository.save(w3);
 
         artifactRepository.save(a6);
+
+
+        // Create some users.
+        HogwartsUser u1 = new HogwartsUser();
+        u1.setUsername("john");
+        u1.setPassword("123456");
+        u1.setEnabled(true);
+        u1.setRoles("admin user");
+        // Don't manually set the id for the user, let the database generate it.
+
+        HogwartsUser u2 = new HogwartsUser();
+        u2.setUsername("eric");
+        u2.setPassword("654321");
+        u2.setEnabled(true);
+        u2.setRoles("user");
+
+        HogwartsUser u3 = new HogwartsUser();
+        u3.setUsername("tom");
+        u3.setPassword("qwerty");
+        u3.setEnabled(false);
+        u3.setRoles("user");
+
+        // i will modify it
+        this.userRepository.save(u1);
+        this.userRepository.save(u2);
+        this.userRepository.save(u3);
+
 
 
     }
