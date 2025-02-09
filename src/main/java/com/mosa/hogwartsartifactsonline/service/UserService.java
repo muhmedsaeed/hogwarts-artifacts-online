@@ -2,22 +2,31 @@ package com.mosa.hogwartsartifactsonline.service;
 
 
 import com.mosa.hogwartsartifactsonline.entity.HogwartsUser;
+import com.mosa.hogwartsartifactsonline.entity.MyUserPrincipal;
 import com.mosa.hogwartsartifactsonline.exception.ObjectNotFoundException;
 import com.mosa.hogwartsartifactsonline.repo.UserRepository;
 import jakarta.transaction.Transactional;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
 @Transactional
-public class UserService {
+public class UserService implements UserDetailsService {
 
     private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
 
 
-    public UserService(UserRepository userRepository) {
+    @Autowired
+    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
 
@@ -35,6 +44,8 @@ public class UserService {
 
     public HogwartsUser save(HogwartsUser newHogwartsUser) {
         // We NEED to encode plain text password before saving to the DB! TODO
+        newHogwartsUser.setPassword(passwordEncoder.encode(newHogwartsUser.getPassword()));
+
         return this.userRepository.save(newHogwartsUser);
     }
 
@@ -54,6 +65,17 @@ public class UserService {
         this.userRepository.findById(userId)
                 .orElseThrow(() -> new ObjectNotFoundException("user", userId));
         this.userRepository.deleteById(userId);
+    }
+
+
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+
+        return this.userRepository.findByUsername(username)
+                .map(user -> new MyUserPrincipal(user))
+                .orElseThrow(() ->
+                new UsernameNotFoundException("username " + username + " not found"));
+
     }
 
 
