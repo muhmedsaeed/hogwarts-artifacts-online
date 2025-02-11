@@ -1,9 +1,5 @@
 package com.mosa.hogwartsartifactsonline.system;
 
-
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpStatus;
-
 public class Result {
 
     private boolean flag;
